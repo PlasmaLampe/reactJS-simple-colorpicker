@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es5",
+        "noImplicitAny": false,
+        "outDir": "public/tmp",
+        "rootDir": "public/scripts",
+        "sourceMap": false,
+        "jsx":"react"
+    },
+    "files": [
+      "typings/index.d.ts",
+      "public/scripts/app.tsx"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}

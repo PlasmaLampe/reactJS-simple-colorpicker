@@ -1,0 +1,43 @@
+{
+  "name": "react-simple-colorpicker",
+  "version": "0.0.1",
+  "private": true,
+  "license": "see LICENSE file",
+  "description": "A simple ReactJS colorpicker",
+  "main": "server.js",
+  "dependencies": {
+    "body-parser": "^1.4.3",
+    "express": "^4.4.5",
+    "react": "^0.14.8",
+    "react-dom": "^0.14.8"
+  },
+  "devDependencies": {
+    "react": "^0.14.7",
+    "react-dom": "^0.14.7",
+    "source-map-loader": "^0.1.5",
+    "ts-loader": "^0.8.2",
+    "typescript": "^1.9.0-dev.20160328",
+    "typings": "^0.7.9",
+    "webpack": "^1.12.14"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npm install; tsc",
+    "start": "node server.js",
+    "prepublish": "typings install",
+    "watch": "webpack --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/reactjs/react-tutorial.git"
+  },
+  "keywords": [],
+  "author": "jamelunxen",
+  "bugs": {
+    "url": "https://github.com/reactjs/react-tutorial/issues"
+  },
+  "homepage": "https://github.com/reactjs/react-tutorial",
+  "engines": {
+    "node": "0.12.x"
+  }
+}
