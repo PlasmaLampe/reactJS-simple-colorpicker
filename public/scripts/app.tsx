@@ -55,12 +55,15 @@ class ColorPicker extends React.Component<any,any> {
   render() {
     var flexColumn = {
       flexDirection : 'column',
-      justifyContent: 'space-between'
+      justifyContent: 'space-between',
+      display: 'flex'
     }
 
     var flexRow = {
       flexDirection : 'row',
-      justifyContent: 'space-between'
+      justifyContent: 'space-between',
+      flexWrap : 'wrap',
+      display: 'flex'
     }
 
     var colors = ['#FF0000', '#00FF00', '#0000FF']
@@ -73,16 +76,20 @@ class ColorPicker extends React.Component<any,any> {
     });
 
     return (
-      <div id='colorpicker' style={flexColumn}>
-        <div id='currentColorBox'>
-          <ColorBox id={'colorbox_current'} key={this.state.chosenColor} color={this.state.chosenColor}/> <br/>
+      <div id='colorpicker' className="colorpicker" style={flexColumn}>
+        <div id='currentColorBox' style={flexRow}>
+          <ColorBox id={'colorbox_current'} key={this.state.chosenColor} color={this.state.chosenColor}/>
+          <small> Current color </small>
         </div>
+
+        <hr/>
 
         <div id='defaultColors' style={flexRow}>
           {boxes}
         </div>
 
         <div id='slidergroup'>
+          <h4 className="colorpickerHeading">RGB</h4>
           <ColorRGBSlider colorname='red'   color={Helper.hexToRGB(this.state.chosenColor).r} colorChanged={this.onColorComponentChanged.bind(this)}></ColorRGBSlider>
           <ColorRGBSlider colorname='green' color={Helper.hexToRGB(this.state.chosenColor).g} colorChanged={this.onColorComponentChanged.bind(this)}></ColorRGBSlider>
           <ColorRGBSlider colorname='blue'  color={Helper.hexToRGB(this.state.chosenColor).b} colorChanged={this.onColorComponentChanged.bind(this)}></ColorRGBSlider>
@@ -110,17 +117,10 @@ class ColorBox extends React.Component<any,any> {
   render() {
     var styleObj = {
       backgroundColor : this.props.color,
-      minHeight : 20,
-      minWidth : 20,
-      maxHeight : 40,
-      maxWidth : 40,
-      borderStyle : 'groove',
-      borderWidth : 3,
-      marginRight : 5
     }
 
     return (
-      <div id={this.props.id} style={styleObj} onClick={this.handleClick.bind(this)}></div>
+      <div id={this.props.id} className="colorbox" style={styleObj} onClick={this.handleClick.bind(this)}></div>
     )
   }
 }
@@ -149,7 +149,7 @@ class ColorRGBSlider extends React.Component<any,any> {
 
       return (
         <div>
-            <small style={flexRow}>{this.props.color}</small>
+            <small style={flexRow}>{this.props.colorname.charAt(0)}</small>
 
             <input type="range"  id={"slider_"+this.props.colorname}
             value={this.props.color}

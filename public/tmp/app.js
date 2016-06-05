@@ -56,11 +56,14 @@ var ColorPicker = (function (_super) {
         var _this = this;
         var flexColumn = {
             flexDirection: 'column',
-            justifyContent: 'space-between'
+            justifyContent: 'space-between',
+            display: 'flex'
         };
         var flexRow = {
             flexDirection: 'row',
-            justifyContent: 'space-between'
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            display: 'flex'
         };
         var colors = ['#FF0000', '#00FF00', '#0000FF'];
         var boxes = colors.map(function (colorOfThisBox) {
@@ -68,13 +71,14 @@ var ColorPicker = (function (_super) {
                 React.createElement(ColorBox, {id: 'colorbox_' + colorOfThisBox, onClickCallback: _this.colorClicked.bind(_this), key: colorOfThisBox, color: colorOfThisBox})
             ));
         });
-        return (React.createElement("div", {id: 'colorpicker', style: flexColumn}, 
-            React.createElement("div", {id: 'currentColorBox'}, 
+        return (React.createElement("div", {id: 'colorpicker', className: "colorpicker", style: flexColumn}, 
+            React.createElement("div", {id: 'currentColorBox', style: flexRow}, 
                 React.createElement(ColorBox, {id: 'colorbox_current', key: this.state.chosenColor, color: this.state.chosenColor}), 
-                " ", 
-                React.createElement("br", null)), 
+                React.createElement("small", null, " Current color ")), 
+            React.createElement("hr", null), 
             React.createElement("div", {id: 'defaultColors', style: flexRow}, boxes), 
             React.createElement("div", {id: 'slidergroup'}, 
+                React.createElement("h4", {className: "colorpickerHeading"}, "RGB"), 
                 React.createElement(ColorRGBSlider, {colorname: 'red', color: Helper.hexToRGB(this.state.chosenColor).r, colorChanged: this.onColorComponentChanged.bind(this)}), 
                 React.createElement(ColorRGBSlider, {colorname: 'green', color: Helper.hexToRGB(this.state.chosenColor).g, colorChanged: this.onColorComponentChanged.bind(this)}), 
                 React.createElement(ColorRGBSlider, {colorname: 'blue', color: Helper.hexToRGB(this.state.chosenColor).b, colorChanged: this.onColorComponentChanged.bind(this)}))));
@@ -93,15 +97,8 @@ var ColorBox = (function (_super) {
     ColorBox.prototype.render = function () {
         var styleObj = {
             backgroundColor: this.props.color,
-            minHeight: 20,
-            minWidth: 20,
-            maxHeight: 40,
-            maxWidth: 40,
-            borderStyle: 'groove',
-            borderWidth: 3,
-            marginRight: 5
         };
-        return (React.createElement("div", {id: this.props.id, style: styleObj, onClick: this.handleClick.bind(this)}));
+        return (React.createElement("div", {id: this.props.id, className: "colorbox", style: styleObj, onClick: this.handleClick.bind(this)}));
     };
     return ColorBox;
 }(React.Component));
@@ -121,7 +118,7 @@ var ColorRGBSlider = (function (_super) {
             justifyContent: 'space-between'
         };
         return (React.createElement("div", null, 
-            React.createElement("small", {style: flexRow}, this.props.color), 
+            React.createElement("small", {style: flexRow}, this.props.colorname.charAt(0)), 
             React.createElement("input", {type: "range", id: "slider_" + this.props.colorname, value: this.props.color, onChange: this.colorChanged.bind(this), min: "0", max: "255", step: "1"})));
     };
     return ColorRGBSlider;
