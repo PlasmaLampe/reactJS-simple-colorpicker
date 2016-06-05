@@ -52,21 +52,29 @@
 	};
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(2);
-	function componentToHex(c) {
-	    var hex = c.toString(16);
-	    return hex.length == 1 ? "0" + hex : hex;
-	}
-	function rgbToHex(r, g, b) {
-	    return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
-	}
-	function hexToRGB(hex) {
-	    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-	    return result ? {
-	        r: parseInt(result[1], 16),
-	        g: parseInt(result[2], 16),
-	        b: parseInt(result[3], 16)
-	    } : null;
-	}
+	var Helper = (function () {
+	    function Helper() {
+	    }
+	    Helper.componentToHex = function (c) {
+	        var hex = c.toString(16);
+	        return hex.length == 1 ? "0" + hex : hex;
+	    };
+	    Helper.rgbToHex = function (r, g, b) {
+	        return "#" + Helper.componentToHex(r) + Helper.componentToHex(g) + Helper.componentToHex(b);
+	    };
+	    Helper.hexToRGB = function (hex) {
+	        var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+	        return result ? {
+	            r: parseInt(result[1], 16),
+	            g: parseInt(result[2], 16),
+	            b: parseInt(result[3], 16)
+	        } : null;
+	    };
+	    return Helper;
+	}());
+	/**
+	*   The wrapper Component. Contains the default colors and the color sliders.
+	*/
 	var ColorPicker = (function (_super) {
 	    __extends(ColorPicker, _super);
 	    function ColorPicker(props) {
@@ -78,16 +86,16 @@
 	        this.setState({ chosenColor: chosenColor });
 	    };
 	    ColorPicker.prototype.onColorComponentChanged = function (colorName, value) {
-	        var currentRGBValues = hexToRGB(this.state.chosenColor);
+	        var currentRGBValues = Helper.hexToRGB(this.state.chosenColor);
 	        switch (colorName) {
 	            case 'red':
-	                this.setState({ chosenColor: rgbToHex(value, currentRGBValues.g, currentRGBValues.b) });
+	                this.setState({ chosenColor: Helper.rgbToHex(value, currentRGBValues.g, currentRGBValues.b) });
 	                break;
 	            case 'green':
-	                this.setState({ chosenColor: rgbToHex(currentRGBValues.r, value, currentRGBValues.b) });
+	                this.setState({ chosenColor: Helper.rgbToHex(currentRGBValues.r, value, currentRGBValues.b) });
 	                break;
 	            case 'blue':
-	                this.setState({ chosenColor: rgbToHex(currentRGBValues.r, currentRGBValues.g, value) });
+	                this.setState({ chosenColor: Helper.rgbToHex(currentRGBValues.r, currentRGBValues.g, value) });
 	                break;
 	            default:
 	                console.error('color must be element red/green/blue...');
@@ -116,12 +124,16 @@
 	                React.createElement("br", null)), 
 	            React.createElement("div", {id: 'defaultColors', style: flexRow}, boxes), 
 	            React.createElement("div", {id: 'slidergroup'}, 
-	                React.createElement(ColorRGBSlider, {colorname: 'red', color: hexToRGB(this.state.chosenColor).r, colorChanged: this.onColorComponentChanged.bind(this)}), 
-	                React.createElement(ColorRGBSlider, {colorname: 'green', color: hexToRGB(this.state.chosenColor).g, colorChanged: this.onColorComponentChanged.bind(this)}), 
-	                React.createElement(ColorRGBSlider, {colorname: 'blue', color: hexToRGB(this.state.chosenColor).b, colorChanged: this.onColorComponentChanged.bind(this)}))));
+	                React.createElement(ColorRGBSlider, {colorname: 'red', color: Helper.hexToRGB(this.state.chosenColor).r, colorChanged: this.onColorComponentChanged.bind(this)}), 
+	                React.createElement(ColorRGBSlider, {colorname: 'green', color: Helper.hexToRGB(this.state.chosenColor).g, colorChanged: this.onColorComponentChanged.bind(this)}), 
+	                React.createElement(ColorRGBSlider, {colorname: 'blue', color: Helper.hexToRGB(this.state.chosenColor).b, colorChanged: this.onColorComponentChanged.bind(this)}))));
 	    };
 	    return ColorPicker;
 	}(React.Component));
+	/**
+	*   A small box that shows a specific color. Furthermore, it is able to
+	*   handle a given click event
+	*/
 	var ColorBox = (function (_super) {
 	    __extends(ColorBox, _super);
 	    function ColorBox(props) {
@@ -146,6 +158,9 @@
 	    };
 	    return ColorBox;
 	}(React.Component));
+	/**
+	*   A slider that is used to modify a specific color value
+	*/
 	var ColorRGBSlider = (function (_super) {
 	    __extends(ColorRGBSlider, _super);
 	    function ColorRGBSlider(props) {
@@ -168,6 +183,9 @@
 	    };
 	    return ColorRGBSlider;
 	}(React.Component));
+	/**
+	*   Attach the whole stuff to the DOM tree
+	*/
 	ReactDOM.render(React.createElement(ColorPicker, null), document.getElementById('content'));
 
 

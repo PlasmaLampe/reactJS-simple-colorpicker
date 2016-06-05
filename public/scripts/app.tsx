@@ -1,40 +1,44 @@
 import * as React     from "react"
 import * as ReactDOM  from "react-dom"
 
-function componentToHex(c) {
-    var hex = c.toString(16);
-    return hex.length == 1 ? "0" + hex : hex;
+class Helper {
+  static componentToHex(c) {
+      var hex = c.toString(16);
+      return hex.length == 1 ? "0" + hex : hex;
+  }
+
+  static rgbToHex(r, g, b) {
+      return "#" + Helper.componentToHex(r) + Helper.componentToHex(g) + Helper.componentToHex(b);
+  }
+
+  static hexToRGB(hex){
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+    } : null;
+  }
 }
 
-function rgbToHex(r, g, b) {
-    return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
-}
-
-function hexToRGB(hex){
-  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return result ? {
-      r: parseInt(result[1], 16),
-      g: parseInt(result[2], 16),
-      b: parseInt(result[3], 16)
-  } : null;
-}
-
-
+/**
+*   The wrapper Component. Contains the default colors and the color sliders.
+*/
 class ColorPicker extends React.Component<any,any> {
   colorClicked(chosenColor) {
     this.setState({chosenColor : chosenColor});
   }
 
   onColorComponentChanged(colorName, value){
-    var currentRGBValues = hexToRGB(this.state.chosenColor);
+    var currentRGBValues = Helper.hexToRGB(this.state.chosenColor);
 
     switch(colorName){
       case 'red':
-        this.setState({chosenColor : rgbToHex(value,currentRGBValues.g,currentRGBValues.b)}); break;
+        this.setState({chosenColor : Helper.rgbToHex(value,currentRGBValues.g,currentRGBValues.b)}); break;
       case 'green':
-        this.setState({chosenColor : rgbToHex(currentRGBValues.r,value,currentRGBValues.b)}); break;
+        this.setState({chosenColor : Helper.rgbToHex(currentRGBValues.r,value,currentRGBValues.b)}); break;
       case 'blue':
-        this.setState({chosenColor : rgbToHex(currentRGBValues.r,currentRGBValues.g,value)}); break;
+        this.setState({chosenColor : Helper.rgbToHex(currentRGBValues.r,currentRGBValues.g,value)}); break;
 
       default:
         console.error('color must be element red/green/blue...')
@@ -79,15 +83,19 @@ class ColorPicker extends React.Component<any,any> {
         </div>
 
         <div id='slidergroup'>
-          <ColorRGBSlider colorname='red'   color={hexToRGB(this.state.chosenColor).r} colorChanged={this.onColorComponentChanged.bind(this)}></ColorRGBSlider>
-          <ColorRGBSlider colorname='green' color={hexToRGB(this.state.chosenColor).g} colorChanged={this.onColorComponentChanged.bind(this)}></ColorRGBSlider>
-          <ColorRGBSlider colorname='blue'  color={hexToRGB(this.state.chosenColor).b} colorChanged={this.onColorComponentChanged.bind(this)}></ColorRGBSlider>
+          <ColorRGBSlider colorname='red'   color={Helper.hexToRGB(this.state.chosenColor).r} colorChanged={this.onColorComponentChanged.bind(this)}></ColorRGBSlider>
+          <ColorRGBSlider colorname='green' color={Helper.hexToRGB(this.state.chosenColor).g} colorChanged={this.onColorComponentChanged.bind(this)}></ColorRGBSlider>
+          <ColorRGBSlider colorname='blue'  color={Helper.hexToRGB(this.state.chosenColor).b} colorChanged={this.onColorComponentChanged.bind(this)}></ColorRGBSlider>
         </div>
       </div>
     )
   }
 }
 
+/**
+*   A small box that shows a specific color. Furthermore, it is able to
+*   handle a given click event
+*/
 class ColorBox extends React.Component<any,any> {
   handleClick() {
     this.props.onClickCallback(this.props.color)
@@ -117,6 +125,9 @@ class ColorBox extends React.Component<any,any> {
   }
 }
 
+/**
+*   A slider that is used to modify a specific color value
+*/
 class ColorRGBSlider extends React.Component<any,any> {
   colorChanged(event){
     // propagate
@@ -149,6 +160,10 @@ class ColorRGBSlider extends React.Component<any,any> {
   }
 }
 
+
+/**
+*   Attach the whole stuff to the DOM tree
+*/
 ReactDOM.render(
   <ColorPicker/>,
   document.getElementById('content')
